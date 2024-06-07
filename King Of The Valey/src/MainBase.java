@@ -7,7 +7,7 @@ abstract class MainBase{
     static int level=1;
     final static int numberLevels=5;
 
-    static int turn=1;
+    static short turn=1;
     static int currentMoney=150;
     final static int moneyPeTurn=30;
     static boolean gameEnd=false;
@@ -26,14 +26,86 @@ abstract class MainBase{
     static void init(){
         for(i=1;i<=linii;i++){
             for(j=1;j<=coloane;j++){
-                tabla[i][j]=new SpatiuTabla("--",0,0,0,0,0);
+                tabla[i][j]=new SpatiuTabla("--",0,0,false);
             }
         }
 
     }
 
+    static void receiveMoney(){
+        currentMoney+=moneyPeTurn;
+    }
 
+    static void changeTurn(){
+        if(turn==1)turn=2;
+        else if(turn==2)turn=1;
+    }
 
+    static void preset1(){
+
+        linii=7;
+        coloane=5;
+
+        MainBase.init();
+
+        Referee.setUnit(2,2,Troop1.type2,Troop1.hp,2,false);
+
+        Referee.setUnit(2,4,Troop1.type2,Troop1.hp,2,false);
+
+        Referee.setUnit(1,3,Heavy1.type2,Heavy1.hp,2,false);
+
+    }
+    static void preset2(){
+
+        linii=9;
+        coloane=5;
+
+        MainBase.init();
+    }
+    static void preset3(){
+        linii=9;
+        coloane=5;
+
+        MainBase.init();
+    }
+    static void preset4(){
+        linii=9;
+        coloane=5;
+
+        MainBase.init();
+    }
+    static void preset5(){
+        linii=9;
+        coloane=5;
+
+        MainBase.init();
+    }
+
+    static void presetChooser(){
+
+        switch (level){
+            case 1: {
+                preset1();
+                break;
+            }
+            case 2: {
+                preset2();
+                break;
+            }
+            case 3: {
+                preset3();
+                break;
+            }
+            case 4: {
+                preset4();
+                break;
+            }
+            case 5: {
+                preset5();
+                break;
+            }
+        }
+    }
 
 
 }

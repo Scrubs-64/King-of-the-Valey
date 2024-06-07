@@ -7,7 +7,10 @@ public class Display extends MainBase{
 
         int winner=Referee.checkWin();
 
-        if(winner!=0)System.out.println("Player "+winner+" won! Battle over.");
+        if(winner!=0){
+            afisareTabla();
+            System.out.println("Player "+winner+" won! Battle over.");
+        }
     }
 
     static void afisareTabla(){

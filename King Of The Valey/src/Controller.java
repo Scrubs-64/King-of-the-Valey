@@ -35,22 +35,23 @@ public class Controller extends MainBase{
 
     }
 
+
     static void placeUnits(){
 
-        int y;
-        int[]properties;
-        boolean okPlacement=false,isUnit=false,hasMoney=true;
+        int y,i;
+        int[] properties;
+        boolean okPlacement=false,isUnit=false,hasMoney=false;
 
         System.out.println("Place units on columns: ");
 
-        while(!okPlacement && !isUnit){
+        while(!okPlacement || !isUnit || !hasMoney){
 
-            isUnit=false;
             okPlacement=true;
+            isUnit=true;
+            hasMoney=true;
 
             try {
                 y=scanner.nextInt();
-                rawInput=scanner.next();
             }
             catch(Exception E){
                 System.out.println("Something went wrong. Try entering again.");
@@ -59,36 +60,42 @@ public class Controller extends MainBase{
                 continue;
             }
 
+            try{
+                rawInput=scanner.next();
+            }
+            catch(Exception E){
+                System.out.println("Something went wrong. Try entering again.");
+                isUnit=false;
+                scanner.nextLine();
+                continue;
+            }
+
             if(y==0)break;
 
             rawInput=rawInput.trim();
-
-            if(y>coloane || y<0){
-                System.out.println("This position does not exist.");
-                okPlacement=false;
-                scanner.nextLine();
-                continue;
-            }
-
-            if(!Objects.equals(tabla[linii][y].type,"--")){
-                System.out.println("Space already occupied. Try entering again.");
-                okPlacement=false;
-                scanner.nextLine();
-                continue;
-            }
-
             properties=Referee.identifyUnitProperties(rawInput);
-            if(properties[0]!=0)isUnit=true;
-            else System.out.println("There is no unit with that name.");
 
-            if(currentMoney<properties[4]){
-                System.out.println("You don't have enough money.");
-                hasMoney=false;
-            }
+
+            if(okPlacement)okPlacement=Referee.checkOkCoordinates(linii, y);
+
+            if(okPlacement)okPlacement=Referee.checkSpaceOccupied(linii,y);
+
+            isUnit=Referee.checkIsUnit(rawInput);
+
+            if(isUnit)hasMoney=Referee.checkImiPermit(properties[1]);
+
+
+            if(!isUnit)System.out.println("There is no unit with that name.");
+            if(!okPlacement)System.out.println("You can't place it there.");
+            if(!hasMoney)System.out.println("You don't have enough money");
 
             if(okPlacement && isUnit && hasMoney){
-                Referee.setUnit(linii, y, rawInput, properties[0],properties[1],properties[2],properties[3],1);
-                currentMoney-=properties[4];
+                Referee.setUnit(linii, y, rawInput, properties[0],1,false);
+                currentMoney-=properties[1];
+
+                for(i=1;i<=coloane;i++){
+                    tabla[linii][i].activated=true;
+                }
             }
 
         }
