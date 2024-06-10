@@ -9,7 +9,8 @@ public class Display extends MainBase{
 
         if(winner!=0){
             afisareTabla();
-            System.out.println("Player "+winner+" won! Battle over.");
+            if(winner<3)System.out.println("Player "+winner+" won! Battle over.");
+            else System.out.println("It's a tie!");
         }
     }
 
@@ -22,6 +23,13 @@ public class Display extends MainBase{
             System.out.println();
         }
         System.out.println("Money: "+currentMoney);
+
+        System.out.println("Hand: ");
+        for(i=0;i<5;i++){
+            System.out.print(hand[i]+" ");
+        }
+        System.out.println();
+        System.out.println();
 
     }
 

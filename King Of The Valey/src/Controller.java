@@ -1,10 +1,9 @@
-import java.util.Objects;
+
 import java.util.Scanner;
 
 public class Controller extends MainBase{
 
     static Scanner scanner=new Scanner(System.in);
-    static String rawInput;
     static boolean okInput=false;
 
     static void selectLevel(){
@@ -38,20 +37,19 @@ public class Controller extends MainBase{
 
     static void placeUnits(){
 
-        int y,i;
+        int i,coordHand,coordTabla;
         int[] properties;
-        boolean okPlacement=false,isUnit=false,hasMoney=false;
+        boolean okPlacement=false,hasMoney=false;
 
         System.out.println("Place units on columns: ");
 
-        while(!okPlacement || !isUnit || !hasMoney){
+        while(!okPlacement || !hasMoney){
 
             okPlacement=true;
-            isUnit=true;
             hasMoney=true;
 
             try {
-                y=scanner.nextInt();
+                coordHand=scanner.nextInt();
             }
             catch(Exception E){
                 System.out.println("Something went wrong. Try entering again.");
@@ -61,37 +59,43 @@ public class Controller extends MainBase{
             }
 
             try{
-                rawInput=scanner.next();
+                coordTabla=scanner.nextInt();
             }
             catch(Exception E){
                 System.out.println("Something went wrong. Try entering again.");
-                isUnit=false;
+                okPlacement=false;
                 scanner.nextLine();
                 continue;
             }
 
-            if(y==0)break;
+            if(coordHand==0)break;
 
-            rawInput=rawInput.trim();
-            properties=Referee.identifyUnitProperties(rawInput);
+            coordHand--;
 
+            //verificarile
 
-            if(okPlacement)okPlacement=Referee.checkOkCoordinates(linii, y);
+            okPlacement= okPlacement && 0 <= coordHand && coordHand <= 4;
 
-            if(okPlacement)okPlacement=Referee.checkSpaceOccupied(linii,y);
+            if(okPlacement)okPlacement=Referee.checkOkCoordinates(linii,coordTabla);
 
-            isUnit=Referee.checkIsUnit(rawInput);
+            if(okPlacement)okPlacement=Referee.checkSpaceOccupied(linii, coordTabla);
 
-            if(isUnit)hasMoney=Referee.checkImiPermit(properties[1]);
+            if(!okPlacement){
+                System.out.println("You can't place it there.");
+                continue;
+            }
 
+            properties=Referee.identifyUnitProperties(hand[coordHand]);
 
-            if(!isUnit)System.out.println("There is no unit with that name.");
-            if(!okPlacement)System.out.println("You can't place it there.");
+            hasMoney=Referee.checkImiPermit(properties[1]);
+
             if(!hasMoney)System.out.println("You don't have enough money");
 
-            if(okPlacement && isUnit && hasMoney){
-                Referee.setUnit(linii, y, rawInput, properties[0],1,false);
+            if(okPlacement && hasMoney){
+                Referee.setUnit(linii, coordTabla, hand[coordHand], properties[0],1,false);
                 currentMoney-=properties[1];
+
+                hand[coordHand]=null;
 
                 for(i=1;i<=coloane;i++){
                     tabla[linii][i].activated=true;

@@ -1,3 +1,5 @@
+import java.util.Random;
+
 abstract class MainBase{
 
     final static short maxLinii=25,maxColoane=25;
@@ -9,18 +11,25 @@ abstract class MainBase{
 
     static short turn=1;
     static int currentMoney=150;
-    final static int moneyPeTurn=30;
+    final static int moneyPeTurn=20;
     static boolean gameEnd=false;
 
-    final static String[] allUnits1=new String[]{"T1","T2","T3","H1","H2","L1","L2","S1","S2","M1","D1","B1","B2"};
-    final static String[] allUnits2=new String[]{"t1","t2","t3","h1","h2","l1","l2","s1","s2","m1","d1","b1","b2"};
-    final static int unitNumber=allUnits1.length;
+    final static String[] commonUnits= new String[]{"T1","H1","S1","B1","D1"};
+    final static int commonUnitsNumber=commonUnits.length;
+    final static String[] rareUnits= new String[]{"B2","M1","T2","H2","L1","L2"};
+    final static int rareUnitsNumber=rareUnits.length;
+    final static String[] epicUnits= new String[]{"T3","S2","L3"};
+    final static int epicUnitsNumber=epicUnits.length;
+    //final static String[] unitList= new String[]{"T1", "T2", "T3", "H1", "H2", "B1", "B2", "S1", "S2", "L1", "L2", "L3", "M1", "D1"};
+    //static int numberOfUnits= unitList.length;
 
-    final static short blastRadiusX[]={1,-1,0,0};
-    final static short blastRadiusY[]={0,0,1,-1};
+    static Random RNGleveled=new Random();
+    static Random RNGchance=new Random();
 
     ///
     static SpatiuTabla[][] tabla = new SpatiuTabla[maxLinii][maxColoane];
+    ///
+    static String[] hand =new String[5];
     ///
 
     static void init(){
@@ -106,6 +115,5 @@ abstract class MainBase{
             }
         }
     }
-
 
 }
